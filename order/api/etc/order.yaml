@@ -1,0 +1,19 @@
+Name: order
+Host: 0.0.0.0
+Port: 8888
+OrderRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: order.rpc
+ProductRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: product.rpc
+UserRpc:
+  Etcd:
+    Hosts:
+      - 127.0.0.1:2379
+    Key: user.rpc
+DtmServer: "etcd://localhost:2379/dtmservice"

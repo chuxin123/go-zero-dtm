@@ -1,0 +1,27 @@
+syntax = "proto3";
+
+package order;
+
+option go_package = "./pb";
+
+message CreateOrderReq {
+  int64 UserId = 1;
+  int64 ProductId = 2;
+  string ProductName = 3;
+  int64 Nums = 4;
+  string OrderNo = 5;
+}
+
+message CreateOrderResp {
+  int64 Id = 1;
+}
+
+message CheckOrderResp {
+  bool result = 1;
+}
+
+service Order {
+  rpc checkOrder(CreateOrderReq) returns (CheckOrderResp);
+  rpc createOrder(CreateOrderReq) returns (CreateOrderResp);
+  rpc createOrderRollback(CreateOrderReq) returns (CreateOrderResp);
+}

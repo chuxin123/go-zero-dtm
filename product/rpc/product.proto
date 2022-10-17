@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package product;
+
+option go_package = "./pb";
+
+message checkStockReq {
+  int64 ProductId = 1;
+  int64 Nums = 2;
+}
+
+message checkStockResp {
+  bool Result = 1;
+}
+
+service Product {
+  rpc deductStock(checkStockReq) returns (checkStockResp);
+  rpc deductStockRollback(checkStockReq) returns (checkStockResp);
+  rpc checkStock(checkStockReq) returns (checkStockResp);
+}

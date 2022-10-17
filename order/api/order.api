@@ -1,0 +1,25 @@
+type (
+	OrderCreateReq {
+		UserId      int64  `json:"user_id"`
+		ProductId   int64  `json:"product_id"`
+		ProductName string `json:"product_name"`
+		Nums        int64  `json:"nums"`
+	}
+
+	OrderCreateReply {
+		Result  bool   `json:"result"`
+		OrderNo string `json:"order_no"`
+		Message string `json:"message"`
+	}
+)
+
+service order {
+	@handler createTccOrder
+	post /api/tcc/order/create (OrderCreateReq) returns (OrderCreateReply)
+	
+	@handler createSagaOrder
+	post /api/saga/order/create (OrderCreateReq) returns (OrderCreateReply)
+	
+	@handler createMsgOrder
+	post /api/msg/order/create (OrderCreateReq) returns (OrderCreateReply)
+}
