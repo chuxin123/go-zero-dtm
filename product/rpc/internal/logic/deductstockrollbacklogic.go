@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"github.com/dtm-labs/client/dtmgrpc"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 
 	"go-zero-dtm/product/rpc/internal/svc"
 	"go-zero-dtm/product/rpc/types/pb"
@@ -31,19 +33,19 @@ func (l *DeductStockRollbackLogic) DeductStockRollback(in *pb.CheckStockReq) (*p
 
 	barrier, err := dtmgrpc.BarrierFromGrpc(l.ctx)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	db, err := sqlx.NewMysql(l.svcCtx.Config.DB.DataSource).RawDB()
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 	productId := in.ProductId
 	nums := in.Nums
 
 	product, err := l.svcCtx.ProductModel.FindOne(l.ctx, productId)
 	if err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	if err = barrier.CallWithDB(db, func(tx *sql.Tx) error {
@@ -54,7 +56,7 @@ func (l *DeductStockRollbackLogic) DeductStockRollback(in *pb.CheckStockReq) (*p
 		}
 		return nil
 	}); err != nil {
-		return nil, err
+		return nil, status.Error(codes.Internal, err.Error())
 	}
 
 	return &pb.CheckStockResp{
